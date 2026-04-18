@@ -71,21 +71,27 @@ public partial class MainWindow : Window
 
     private void SendCurrentMessage()
     {
+        // 1. Получаем текст и сразу убираем пробелы по краям
         string text = MessageInputBox.Text?.Trim() ?? string.Empty;
 
+        // 2. Валидация: если строка пустая после Trim, выходим из метода
         if (string.IsNullOrWhiteSpace(text))
         {
             return;
         }
 
-        _client?.SendMessage(text);
-
-        // Локальное отображение своего сообщения
-        if (_client != null && _client.IsConnected())
+        // 3. Проверка состояния подключения перед отправкой
+        if (_client == null || !_client.IsConnected())
         {
-            AddMessage($"{_client.Nick}: {text}");
+            AddMessage("[Ошибка] Нет подключения к серверу.");
+            return;
         }
 
+        // 4. Отправка и локальное отображение
+        _client.SendMessage(text);
+        AddMessage($"{_client.Nick}: {text}");
+
+        // 5. Очистка поля ввода
         MessageInputBox.Text = string.Empty;
     }
 
