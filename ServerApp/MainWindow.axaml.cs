@@ -80,7 +80,9 @@ public partial class MainWindow : Window
 
     private void AddLog(string message)
     {
-        LogListBox.Items.Add(message);
+        string time = DateTime.Now.ToString("HH:mm:ss");
+        
+        LogListBox.Items.Add($"[{time}] {message}");
         LogScrollViewer.ScrollToEnd();
     }
 }
